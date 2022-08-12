@@ -191,9 +191,9 @@ for i in range(3):
 f1 = 40
 f2 = 100
 d01 =  195
-d12 =  139
+d12 =  140
 d23 =  470
 
-print(q_output(z_in, z0_in, zR_in, d01, f1, d12, f2, d23))
+print(telescope_output(z_in, z0_in, zR_in, d01, f1, d12, f2, d23))
     
      

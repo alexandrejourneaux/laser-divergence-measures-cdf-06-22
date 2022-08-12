@@ -52,13 +52,17 @@ popt, pcov = curve_fit(waist, z_array, w_array, p0=[1e-3, 2], bounds=((0, -np.in
 plt.figure()
 # plt.scatter(z_array, w_array_low, c="b", label="My data, w0 = "+f"{popt_low[0]:.2e}")
 # plt.scatter(z_array, w_array_high, c="b", label="My data, w0 = "+f"{popt_high[0]:.2e}")
-plt.scatter(z_array, w_array, c="b")#, label="My data, w0 = "+f"{popt[0]:.2e}")
+plt.scatter(z_array, w_array*1000, c="b")#, label="My data, w0 = "+f"{popt[0]:.2e}")
 
-z_plot = np.linspace(-1, 3, 300)
-# plt.plot(z_plot, [waist(z, *popt_low) for z in z_plot], c="r")
-# plt.plot(z_plot, [waist(z, *popt_high) for z in z_plot], c="r")
-plt.plot(z_plot, [waist(z, *popt) for z in z_plot], c="r")
-plt.ylim((-0.0001, 0.00160))
+z_plot = np.linspace(-1, 3, 400)
+plt.plot(z_plot, [waist(z, *popt)*1000 for z in z_plot], c="r", label=f"w0 = {round(1000*popt[0]*1e3)/1000} mm, z0 = {round(1000*popt[1]*1e3)/1000} mm")
+plt.xlabel("Distance to telescope (m)")
+plt.ylabel("Beam waist (mm)")
+plt.title("Beam divergence")
 plt.legend()
+plt.ylim((1, 1.60))
+plt.savefig("azurlight_beam_after_telescope.png")
+
+
 
 # print(popt)

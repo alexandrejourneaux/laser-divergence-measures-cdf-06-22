@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.optimize import curve_fit
+from tikzplotlib import clean_figure as tikz_clean, save as tikz_save
 
 def dx(N):
     res = np.diag(np.ones((N-1,), dtype=float), k=1) - np.diag(np.ones((N-1,), dtype=float), k=-1)
@@ -62,8 +63,13 @@ beam_shape45 = - dx(len(power45))@power45
 popt45, pcov45 = curve_fit(gaussian, z45, beam_shape45, p0=[1, 5, 1], bounds=([-np.inf, -np.inf, 0],[np.inf, np.inf, np.inf]))
 
 plt.figure()
-plt.scatter(z45, beam_shape45)
-plt.plot(z45, gaussian(z45, *popt45), c="r")
+plt.scatter(z45, beam_shape45/np.max(beam_shape45))#, label="Mesures")
+plt.plot(z45, gaussian(z45, *popt45)/np.max(beam_shape45), c="r")#, label=f"Interpolation")
+plt.xlabel("Position de la lame (mm)")
+plt.ylabel("Dérivée de la puissance (u.a.)")
+plt.legend()
+tikz_clean()
+tikz_save("interpolation_gaussienne_1D.tikz")
 
 #%% d = 60 cm
 
@@ -167,10 +173,18 @@ w_array = np.array([popt45[2], popt60[2], popt90[2], popt140[2], popt190[2], pop
                    
 popt, pcov = curve_fit(waist, z_array, w_array, bounds=((0, -np.inf), (np.inf, np.inf)))
 
-plt.figure()
-plt.scatter(z_array, w_array)
+plt.figure(figsize=(6, 2))
+plt.scatter(z_array, w_array*1000)
 
 z_plot = np.linspace(0, 3, 400)
-plt.plot(z_plot, [waist(z, *popt) for z in z_plot], c="r")
+plt.plot(z_plot, [waist(z, *popt)*1000 for z in z_plot], c="r")#, label="Interpolation") #f"w0 = {round(1000*popt[0]*1e3)/1000} mm, z0 = {round(1000*popt[1]*1e3)/1000} mm")
+plt.xlabel("Distance au collimateur (m)")
+plt.ylabel("Demi-largeur à $1/e^2$ du faisceau (mm)")
+# plt.title("Beam divergence")
+# plt.legend()
+plt.savefig("koheras_beam_divergence.png")
+tikz_clean()
+tikz_save("beam_divergence_1550.tikz")
 
-print("waist = ", popt[0]*1e3, " mm")
+
+print("w0 = ", popt[0]*1e3, " mm")

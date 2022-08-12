@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.optimize import curve_fit
+from tikzplotlib import clean_figure as tikz_clean, save as tikz_save
 
 def dx(N):
     res = np.diag(np.ones((N-1,), dtype=float), k=1) - np.diag(np.ones((N-1,), dtype=float), k=-1)
@@ -101,9 +102,14 @@ w_array = np.array([popt27[2], popt93[2]])*1e-3
 popt, pcov = curve_fit(waist, z_array, w_array, bounds=((0, -np.inf), (np.inf, np.inf)))
 
 plt.figure()
-plt.scatter(z_array, w_array)
+plt.scatter(z_array, w_array*1000)
 
-z_plot = np.linspace(0, 3, 400)
-plt.plot(z_plot, [waist(z, *popt) for z in z_plot], c="r")
+z_plot = np.linspace(-3, 3, 400)
+plt.plot(z_plot, [waist(z, *popt)*1000 for z in z_plot], c="r", label=f"w0 = {round(1000*popt[0]*1e3)/1000} mm, z0 = {round(1000*popt[1]*1e3)/1000} mm")
+plt.xlabel("Distance to telescope (m)")
+plt.ylabel("Beam waist (mm)")
+plt.title("Beam divergence")
+plt.legend()
+plt.savefig("koheras_beam_after_telescope.png")
 
 print(popt[0] * 1e3)

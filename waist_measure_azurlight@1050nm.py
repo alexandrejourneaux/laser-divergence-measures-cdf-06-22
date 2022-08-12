@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.optimize import curve_fit
+from tikzplotlib import clean_figure as tikz_clean, save as tikz_save
 
 wavelength = 1050.34e-9 # m
 
@@ -31,15 +32,23 @@ doc_popt, doc_pcov = curve_fit(waist, doc_z_array, doc_w_array, p0=[1e-3, 0], bo
 plt.figure()
 # plt.scatter(z_array, w_array_low, c="b", label="My data, w0 = "+f"{popt_low[0]:.2e}")
 # plt.scatter(z_array, w_array_high, c="b", label="My data, w0 = "+f"{popt_high[0]:.2e}")
-plt.scatter(z_array, w_array, c="b", label="My data, w0 = "+f"{popt[0]:.2e}")
-plt.scatter(doc_z_array, doc_w_array, c="g", label=f"Doc data, w0 = "+f"{doc_popt[0]:.2e}")
+plt.scatter(z_array, w_array*1000, c="b", label=f"Measures") #", w0 = {round(1000*popt[0]*1e3)/1000} mm, z0 = {round(1000*popt[1]*1e3)/1000} mm")
+plt.scatter(doc_z_array, doc_w_array*1000, c="g", label=f"Documentation") #", w0 = {round(1000*doc_popt[0]*1e3)/1000} mm, z0 = {round(1000*doc_popt[1]*1e3)/1000} mm")
+plt.xlabel("Distance au collimateur (m)")
+plt.ylabel("Demi-largeur à $1/e^2$ du faisceau (mm)")
+# plt.title("Beam divergence")
+plt.legend()
 
 z_plot = np.linspace(-1, 3, 300)
 # plt.plot(z_plot, [waist(z, *popt_low) for z in z_plot], c="r")
 # plt.plot(z_plot, [waist(z, *popt_high) for z in z_plot], c="r")
-plt.plot(z_plot, [waist(z, *popt) for z in z_plot], c="r")
-plt.plot(z_plot, [waist(z, *doc_popt) for z in z_plot], c="r")
+plt.plot(z_plot, [waist(z, *popt)*1000 for z in z_plot], c="r")#, label="Interpolations")
+plt.plot(z_plot, [waist(z, *doc_popt)*1000 for z in z_plot], c="r")
 
 plt.legend()
+# plt.savefig("azurlight_beam_divergence.png")
+
+tikz_clean()
+tikz_save("beam_divergence_1050.tikz")
 
 print("waist = ", popt[0]*1e3, " mm")
