@@ -13,39 +13,6 @@ def dx(N):
 def gaussian(x, amp, avg, w):
     return amp * np.exp(- 2*(x - avg)**2 / w**2)
 
-#%% d = 15 cm
-# z15 = np.arange(2.5, 6.5, 0.1)
-# power15 = np.array([5.70, 5.70, 5.68, 5.65, 5.63, 5.60, 5.58, 5.52, 5.51, 5.5, 
-#                   5.42, 5.33, 5.26, 5.15, 5.03, 4.86, 4.67, 4.41, 4.05, 3.63, 
-#                   3.2, 2.7, 2.25, 1.86, 1.5, 1.16, 0.86, 0.65, 0.48, 0.33, 
-#                   0.23, 0.15, 0.10, 0.07, 0.04, 0.03, 0.02, 0.01, 0.01, 0.01])
-
-# beam_shape15 = - dx(len(power15))@power15
-
-# popt15, pcov15 = curve_fit(gaussian, z15, beam_shape15, p0=[1, 5, 1], bounds=([-np.inf, -np.inf, 0],[np.inf, np.inf, np.inf]))
-
-# plt.figure()
-# plt.scatter(z15, beam_shape15)
-# plt.plot(z15, gaussian(z15, *popt15), c="r")
-
-
-
-#%% d = 30 cm
-
-# z30 = np.arange(1.0, 8, 0.1)
-# power30 = np.array([4.97, 4.97, 4.98, 4.98, 4.97, 4.95, 4.94, 4.94, 4.93, 4.94,
-#                   4.95, 4.94, 4.94, 4.95, 4.96, 4.96, 4.93, 4.92, 4.93, 4.96,
-#                   4.97, 4.90, 4.80, 4.67, 4.65, 4.58, 4.56, 4.51, 4.44, 4.35, 4.26, 3.98, 3.81, 3.59, 3.33, 3.03, 2.70,
-#                   2.32, 1.9, 1.56, 1.24, 0.94, 0.70, 0.49, 0.36, 0.25, 0.17, 0.11, 0.072, 0.047, 0.031, 0.020, 0.014, 0.011, 0.0088, 0.0074, 0.0064, 0.0056, 0.0052, 0.0049, 0.0040, 0.0044, 0.0034, 0.0033, 0.0036, 0.0036, 0.0036, 0.0035, 0.0033, 0.0033])
-
-# beam_shape30 = - dx(len(power30))@power30
-
-# popt30, pcov30 = curve_fit(gaussian, z30, beam_shape30, p0=[1, 5, 1], bounds=([-np.inf, -np.inf, 0],[np.inf, np.inf, np.inf]))
-
-# plt.figure()
-# plt.scatter(z30, beam_shape30)
-# plt.plot(z30, gaussian(z30, *popt30), c="r")
-
 #%% d = 45 cm
 
 z45 = np.arange(1.0, 8, 0.1)
@@ -68,8 +35,8 @@ plt.plot(z45, gaussian(z45, *popt45)/np.max(beam_shape45), c="r")#, label=f"Inte
 plt.xlabel("Position de la lame (mm)")
 plt.ylabel("Dérivée de la puissance (u.a.)")
 plt.legend()
-tikz_clean()
-tikz_save("interpolation_gaussienne_1D.tikz")
+#tikz_clean()
+#tikz_save("interpolation_gaussienne_1D.tikz")
 
 #%% d = 60 cm
 
@@ -180,11 +147,9 @@ z_plot = np.linspace(0, 3, 400)
 plt.plot(z_plot, [waist(z, *popt)*1000 for z in z_plot], c="r")#, label="Interpolation") #f"w0 = {round(1000*popt[0]*1e3)/1000} mm, z0 = {round(1000*popt[1]*1e3)/1000} mm")
 plt.xlabel("Distance au collimateur (m)")
 plt.ylabel("Demi-largeur à $1/e^2$ du faisceau (mm)")
-# plt.title("Beam divergence")
-# plt.legend()
-plt.savefig("koheras_beam_divergence.png")
-tikz_clean()
-tikz_save("beam_divergence_1550.tikz")
+#plt.savefig("koheras_beam_divergence.png")
+#tikz_clean()
+#tikz_save("beam_divergence_1550.tikz")
 
 
 print("w0 = ", popt[0]*1e3, " mm")

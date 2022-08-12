@@ -26,5 +26,6 @@ popt, pcov = curve_fit(gaussian, z, beam_shape, p0=[1, 5, 1], bounds=([-np.inf, 
 
 plt.figure()
 plt.scatter(z, beam_shape)
-plt.plot(z, gaussian(z, *popt), c="r")
+z_finer = np.linspace(z[0], z[-1], 500)
+plt.plot(z_finer, gaussian(z_finer, *popt), c="r")
 print(popt)
